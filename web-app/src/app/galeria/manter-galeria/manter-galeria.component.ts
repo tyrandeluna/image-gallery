@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ConfigClass } from 'src/app/classes/config-class';
 import { GaleriaService } from 'src/app/servicos/galeria/galeria.service';
 
@@ -16,6 +16,7 @@ export class ManterGaleriaComponent implements OnInit {
   imagemUrl: any;
 
   galeriaFormGroup: any;
+  registro: any = {};
 
   server: string = ConfigClass.getUrlApi().toString();
 
@@ -23,7 +24,7 @@ export class ManterGaleriaComponent implements OnInit {
 
   ngOnInit() {
     this.galeriaFormGroup = this.formBuilder.group({
-      id_galeria: [{value: '', disabled: true}],
+      id_galeria: [{value: null, disabled: true}],
       titulo: [],
       dados_imagem: null
     });
@@ -37,7 +38,28 @@ export class ManterGaleriaComponent implements OnInit {
   }
 
   onSubmit() {
-    this.cadastrar(this.galeriaFormGroup.value);
+    if(this.registro.id_galeria){
+      this.editar(this.galeriaFormGroup.value);
+    } else {
+      this.cadastrar(this.galeriaFormGroup.value);
+    }
+  }
+
+  editar(dados: any) {
+    if(dados.dados_imagem){
+      dados.id_galeria = this.registro.id_galeria;
+      this.galeriaService.editar(dados).subscribe(res => {
+        
+        this.limparForm();
+        this.listar();
+        this.exibirListagemForm = false;
+        res.body.msg ? this.montarMsg(res.body.msg, true) : this.montarMsg('Sucesso!', true);
+      }, error => {
+        this.montarMsg('Erro ao realizar a requisição!', false);
+      })
+    } else {
+      this.montarMsg('Por favor, envie uma imagem!', false);
+    }
   }
 
   cadastrar(dados: any) {
@@ -51,9 +73,24 @@ export class ManterGaleriaComponent implements OnInit {
     })
   }
 
+  editarForm(id: number): void {
+    this.exibirListagemForm = true;
+
+    this.galeriaService.getId(id).subscribe(res => {
+      this.registro.id_galeria = res.body.dados[0].id_galeria;
+      this.registro.titulo = res.body.dados[0].titulo;
+
+      if(res.body.dados[0].caminho != null) {
+        this.imagemUrl = this.server + res.body.dados[0].caminho.substring(1);
+      }
+    }, error => {
+      this.montarMsg('Erro ao realizar a requisição!', false);
+    })
+  }
+
   limparForm() {
     this.galeriaFormGroup.reset();
-    let formHTML = <HTMLFontElement>document.getElementById('galeriaForm');
+    let formHTML = <HTMLFormElement>document.getElementById('galeriaForm');
     formHTML.reset();
     this.imagemUrl = null;
   }
@@ -71,7 +108,7 @@ export class ManterGaleriaComponent implements OnInit {
         this.galeriaFormGroup.get('dados_imagem').setValue({
           nome_arquivo: arquivo.name,
           tipo_arquivo: arquivo.type,
-          imagem_base64: leitor.result.split(',')[1]
+          imagem_base64: (<string>leitor.result).split(',')[1]
         })
       }
     }
