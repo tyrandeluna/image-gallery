@@ -29,10 +29,14 @@
                         <td>{{ item.titulo }}</td>
                         <td><img src="{{ item.caminho }}" class="img-fluid" width="30%" alt="Responsive image"></td>                        
                         <td>
-                            <button class="btn btn-danger" (click)="editarForm(item.id_galeria)">Editar</button>
+                            <button class="btn btn-danger" (click)="editarForm(item.id_galeria)"> 
+                                <i class="far fa-edit"></i> Editar
+                            </button>
                         </td>
                         <td>
-                            <button class="btn btn-danger" (click)="deletar(item.id_galeria)">Excluir</button>
+                            <button class="btn btn-danger" (click)="deletar(item.id_galeria)">
+                                <i class="far fa-trash-alt"></i> Excluir
+                            </button>
                         </td>
                     </tr>
 
@@ -79,8 +83,12 @@
 
                 
                 <div class="form-inline">
-                    <button id='cadastrar-boot' type="submit" class="btn btn-primary mr-sm-2">Salvar</button>                    
-                    <button id='btn-cancelar-operacao' type="button" class="btn btn-primary">Cancelar</button>
+                    <button id='cadastrar-boot' type="submit" class="btn btn-primary mr-sm-2">
+                        <i class="far fa-trash-alt"></i> Salvar
+                    </button>                    
+                    <button id='btn-cancelar-operacao' type="button" class="btn btn-primary" (click)="cancelar()">
+                        <i class="fas fa-ban"></i> Cancelar
+                    </button>
                 </div>
 
             </form>

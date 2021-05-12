@@ -124,6 +124,11 @@ export class ManterGaleriaComponent implements OnInit {
     }
   }
 
+  cancelar(){
+    this.exibirListagemForm = false;
+    this.limparForm();
+  }
+
   listar(): void {
     this.galeriaService.getTodos().subscribe(res => {
       if(res.body.erro) {
