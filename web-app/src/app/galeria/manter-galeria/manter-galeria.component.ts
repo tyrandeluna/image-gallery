@@ -45,6 +45,16 @@ export class ManterGaleriaComponent implements OnInit {
     }
   }
 
+  deletar(id: number) {
+    this.galeriaService.deletar(id).subscribe( res => {
+      this.listar();
+      console.log(res.body.msg);
+      this.montarMsg(res.body.msg, true);
+    }, error => {
+      this.montarMsg('Erro ao realizar a requisição!', false);
+    })
+  }
+
   editar(dados: any) {
     if(dados.dados_imagem){
       dados.id_galeria = this.registro.id_galeria;
@@ -53,7 +63,7 @@ export class ManterGaleriaComponent implements OnInit {
         this.limparForm();
         this.listar();
         this.exibirListagemForm = false;
-        res.body.msg ? this.montarMsg(res.body.msg, true) : this.montarMsg('Sucesso!', true);
+        this.montarMsg(res.body.msg, true);
       }, error => {
         this.montarMsg('Erro ao realizar a requisição!', false);
       })
@@ -67,7 +77,7 @@ export class ManterGaleriaComponent implements OnInit {
       this.limparForm();
       this.listar();
       this.exibirListagemForm = false;
-      res.body.msg ? this.montarMsg(res.body.msg, true) : this.montarMsg('Sucesso!', true);
+      this.montarMsg(res.body.msg, true);
     }, error => {
       this.montarMsg('Erro ao realizar a requisição!', false);
     })
@@ -126,7 +136,6 @@ export class ManterGaleriaComponent implements OnInit {
             caminho: this + (objeto.caminho ? objeto.caminho.substring(1) : objeto.caminho)
           }
         }, this.server);
-        res.body.msg ? this.montarMsg(res.body.msg, true) : this.montarMsg('Sucesso!', true);
       }
     }, error => {
       this.montarMsg('Erro ao realizar a requisição!', false);
