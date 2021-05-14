@@ -1,7 +1,14 @@
-<h1>Cadastro Imagens Galeria</h1>
-<div id="msg" [innerHTML]="mensagem"></div>
 
-<div id="listagem" [hidden]="exibirListagemForm">
+<div class="d-flex justify-content-center" *ngIf="showLoading">
+    <div class="spinner-grow" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+<h1 *ngIf="!showLoading">Cadastro Imagens Galeria</h1>
+<div id="msg" [innerHTML]="mensagem" *ngIf="!showLoading"></div>
+
+<div id="listagem" [hidden]="exibirListagemForm" *ngIf="!showLoading">
     <button 
     id='btn-exibir-formulario' 
     type="button" 
@@ -34,7 +41,7 @@
                             </button>
                         </td>
                         <td>
-                            <button class="btn btn-danger" (click)="deletar(item.id_galeria)">
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" (click)="itemToDelete = item.id_galeria">
                                 <i class="far fa-trash-alt"></i> Excluir
                             </button>
                         </td>
@@ -84,7 +91,7 @@
                 
                 <div class="form-inline">
                     <button id='cadastrar-boot' type="submit" class="btn btn-primary mr-sm-2">
-                        <i class="far fa-trash-alt"></i> Salvar
+                        <i class="far fa-save"></i> Salvar
                     </button>                    
                     <button id='btn-cancelar-operacao' type="button" class="btn btn-primary" (click)="cancelar()">
                         <i class="fas fa-ban"></i> Cancelar
@@ -95,3 +102,5 @@
         </div>
     </div>
 </div>
+
+<app-modal [idItem]="itemToDelete" (doExclusion)="deletar($event)"></app-modal>

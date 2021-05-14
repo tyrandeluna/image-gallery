@@ -12,6 +12,8 @@ export class HomeCarouselComponent implements OnInit {
 
   server: string = ConfigClass.getUrlApi().toString();
 
+  showLoading: boolean = true;
+
   constructor(private galeriaService: GaleriaService) { }
 
   ngOnInit() {
@@ -24,7 +26,7 @@ export class HomeCarouselComponent implements OnInit {
         }
       }, this.server);
 
-      console.log(this.imagens)
+      this.showLoading = false;
     })
   }
 

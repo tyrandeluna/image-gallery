@@ -19,6 +19,9 @@ export class ManterGaleriaComponent implements OnInit {
   registro: any = {};
 
   server: string = ConfigClass.getUrlApi().toString();
+  showLoading: boolean = true;
+  showModal: boolean = false;
+  itemToDelete: number;
 
   constructor(private galeriaService: GaleriaService, private formBuilder: FormBuilder) { }
 
@@ -141,6 +144,7 @@ export class ManterGaleriaComponent implements OnInit {
             caminho: this + (objeto.caminho ? objeto.caminho.substring(1) : objeto.caminho)
           }
         }, this.server);
+        this.showLoading = false;
       }
     }, error => {
       this.montarMsg('Erro ao realizar a requisição!', false);

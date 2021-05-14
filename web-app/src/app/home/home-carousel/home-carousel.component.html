@@ -1,7 +1,13 @@
 <div class="container">
-  <h1>Galeria de Imagens</h1>
+  <div class="d-flex justify-content-center" *ngIf="showLoading">
+    <div class="spinner-grow" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
 
-  <ngb-carousel *ngIf="imagens">
+  <h1 *ngIf="!showLoading">Galeria de Imagens</h1>
+
+  <ngb-carousel *ngIf="imagens && !showLoading">
       <ng-template ngbSlide *ngFor="let item of imagens">
         <img [src]="item.caminho" alt="Random first slide" class="img-fluid" width="130%">
         <div class="carousel-caption">
